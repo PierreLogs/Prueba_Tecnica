@@ -7,18 +7,20 @@ use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
 {
+    //Creamos el método "show"
     public function show(Request $request, $id)
     {
-        // Validación del ID
+        // Validación del ID, da error si el número es negativo
         if (!is_numeric($id) || $id <= 0) {
             return response()->json([
                 'error' => 'El ID debe ser un número positivo'
             ], 422);
         }
 
-        $response = Http::withoutVerifying()
+        $response = Http::withoutVerifying() //El cliente Http withoutVerifying Evita temporalmente prolemas con el certificado SSL en Local
             ->get("https://jsonplaceholder.typicode.com/posts/{$id}");
 
+        //Manejo de errores en el caso si el post no existe
         if ($response->status() === 404) {
             return response()->json([
                 'error' => 'Post no encontrado'
@@ -33,7 +35,7 @@ class PostController extends Controller
 
         $post = $response->json();
 
-        // Modificar el título según el requisito
+        // Modificar el título agregando el prefijo "POST" según el requisito enunciado
         $post['title'] = 'POST: ' . $post['title'];
 
         // Retornar solo los campos solicitados

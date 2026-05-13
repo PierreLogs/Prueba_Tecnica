@@ -2,18 +2,22 @@ import { useState } from 'react';
 import axios from 'axios';
 
 function App() {
-  const [id, setId] = useState('');
-  const [post, setPost] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [id, setId] = useState(''); //Permite guardar el número que ingresa el usuario
+  const [post, setPost] = useState(null); //Permite guardar los datos percibidos
+  const [error, setError] = useState(''); //Muestra los mensajes de error
+  const [loading, setLoading] = useState(false); //muestra el estado de carga
 
   const consultar = async () => {
+    /*async permite permite que la consola sepa que se esta haciendo 
+     * una peticion asincrona
+     */
     if (!id) return;
 
     setLoading(true);
     setError('');
     setPost(null);
 
+    //Manejo de escepciones
     try {
       const res = await axios.get(`http://127.0.0.1:8000/api/posts/${id}`);
       setPost(res.data);
@@ -47,7 +51,7 @@ function App() {
           disabled={loading}
           style={{ padding: '10px 20px', marginLeft: '10px', fontSize: '16px' }}
         >
-          {loading ? 'Cargando...' : 'Consultar'}
+          {loading ? 'Cargando...' : 'Consultar'} //operador ternario para consultar el estado
         </button>
       </div>
 
@@ -57,7 +61,7 @@ function App() {
         <div style={{ marginTop: '30px', border: '1px solid #ccc', padding: '20px', borderRadius: '8px' }}>
           <h2>{post.title}</h2>
           <p><strong>ID:</strong> {post.id}</p>
-          <p>{post.body}</p>
+          <p><strong>Mensaje:</strong> {post.body}</p>
         </div>
       )}
     </div>
